@@ -27,7 +27,7 @@ return array(
 
 ### Create the redirection
 
-I want my short redirect url is : http://myproject.com/go/(the slug)
+I want my short redirect url is : http://your-fuel-url.com/go/(the slug)
 
 1. In my index controller (app/classes/controller/index.php) :
 
@@ -96,7 +96,7 @@ return array(
 	// Return http://www.fuelphp.com
 	\LbUrl\Helper_Url::getUrl($url);
 
-	// Return http://myproject/go/my-url
+	// Return http://your-fuel-url/go/my-url
 	\LbUrl\Helper_Url::getUrl($url, true);
 ```
 
