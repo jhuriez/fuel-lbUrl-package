@@ -57,20 +57,49 @@ return array(
 );
 ```
 
-## Usage
+## Usage (example)
 
-### Create a random short URL :
-
-```php
-\LbUrl\Helper_Url::generate($url);
-```
-
-### Redirect to the long URL :
+### Create easily a short url
 
 ```php
-$slug = 'd45z'; // If my short URL is : http://my-project.com/go/d45z
-\LbUrl\Helper_Url::redirect($slug);
+	$url = \LbUrl\Helper_Url::generate("http://www.fuelphp.com");
+    echo 'your short URL : ' . \LbUrl\Helper_Url::getUrl($url, true);
 ```
+
+### Create a short url
+
+```php
+	$url = \LbUrl\Helper_Url::forge();
+
+    // Set params for save the url
+    $data = array(
+        'slug'        => 'my-url',
+        'url_target' => 'http://www.fuelphp.com',
+        'code'        => '302',
+        'description' => 'the description',
+        'method'      => 'location',
+        'active'      => true,
+    );
+    $url->from_array($data);
+
+    // Save
+    $url = \LbUrl\Helper_Url::manage($url);
+
+    echo 'your short URL : ' . \LbUrl\Helper_Url::getUrl($url, true);
+```
+
+### Get the URL from the model
+
+```php
+	$url = \LbUrl\Helper_Url::find('my-url');
+
+	// Return http://www.fuelphp.com
+	\LbUrl\Helper_Url::getUrl($url);
+
+	// Return http://myproject/go/my-url
+	\LbUrl\Helper_Url::getUrl($url, true);
+```
+
 
 ## Helper functions
 
@@ -142,50 +171,6 @@ For save/update the model
 > LbUrl\Helper_Url::getAllUrls($getMaster = true, $active = false)
 
 Return the list of URLs model
-
-## Usage (example)
-
-### Create easily a short url
-
-```php
-	$url = \LbUrl\Helper_Url::generate("http://www.fuelphp.com");
-    echo 'your short URL : ' . \LbUrl\Helper_Url::getUrl($url, true);
-```
-
-### Create a short url
-
-```php
-	$url = \LbUrl\Helper_Url::forge();
-
-    // Set params for save the url
-    $data = array(
-        'slug'        => 'my-url',
-        'url_target' => 'http://www.fuelphp.com',
-        'code'        => '302',
-        'description' => 'the description',
-        'method'      => 'location',
-        'active'      => true,
-    );
-    $url->from_array($data);
-
-    // Save
-    $url = \LbUrl\Helper_Url::manage($url);
-
-    echo 'your short URL : ' . \LbUrl\Helper_Url::getUrl($url, true);
-```
-
-### Get the URL from the model
-
-```php
-	$url = \LbUrl\Helper_Url::find('my-url');
-
-	// Return http://www.fuelphp.com
-	\LbUrl\Helper_Url::getUrl($url);
-
-	// Return http://myproject/go/my-url
-	\LbUrl\Helper_Url::getUrl($url, true);
-```
-
 
 ## Url module
 
