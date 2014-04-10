@@ -14,14 +14,14 @@ class Helper_Url
     /**
      * Generate rapidly a short url
      * 
-     * @param  string  $urlTarget  [description]
-     * @param  string  $slug       [description]
-     * @param  string  $prefix     [description]
-     * @param  string  $suffix     [description]
-     * @param  string  $code       [description]
-     * @param  string  $randomType [description]
-     * @param  int     $length     [description]
-     * @return [type]              [description]
+     * @param  string  $urlTarget 
+     * @param  string  $slug      
+     * @param  string  $prefix    
+     * @param  string  $suffix    
+     * @param  string  $code      
+     * @param  string  $randomType
+     * @param  int     $length    
+     * @return Model_Url             
      */
     public static function generate($urlTarget, $slug = false, $prefix = false, $suffix = false, $code = '302', $method = 'location', $randomType = false, $length = false)
     {
@@ -44,6 +44,12 @@ class Helper_Url
         return $url;
     }
 
+    /**
+     * Get a random Slug
+     * @param  mixed $randomType
+     * @param  mixed $length    
+     * @return string           
+     */
     public static function randomSlug($randomType = false, $length = false)
     {
         // Default value
@@ -56,6 +62,10 @@ class Helper_Url
         return $slug;
     }
 
+    /**
+     * Do the redirection
+     * @param  Model_Url $url 
+     */
     public static function redirect($url)
     {
         (is_numeric($url) or is_string($url)) and $url = self::find($url, true);
@@ -71,6 +81,11 @@ class Helper_Url
         \Response::redirect($uri, $url->method, $url->code);
     }
 
+    /**
+     * Toggle active property 
+     * @param  Model_Url $url 
+     * @return Model_Url      
+     */
     public static function toggleActive($url)
     {
         (is_numeric($url) or is_string($url)) and $url = self::find($url, false, false);
@@ -82,6 +97,12 @@ class Helper_Url
         return self::manage($url);
     }
 
+    /**
+     * Return the Long URL OR the Short URL
+     * @param  Model_Url  $url  
+     * @param  boolean $slug 
+     * @return string        
+     */
     public static function getUrl($url, $slug = false)
     {
         $regex = '/^([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$/';
@@ -110,6 +131,12 @@ class Helper_Url
         return \LbUrl\Model_Url::forge($data);
     }
 
+    /**
+     * Return all urls
+     * @param  boolean $getMaster Only master
+     * @param  boolean $active    Only active
+     * @return array             
+     */
     public static function getAllUrls($getMaster = true, $active = false)
     {
         $urls = \LbUrl\Model_Url::query()->where('id_url_master', '=', NULL);
@@ -118,6 +145,51 @@ class Helper_Url
         return $urls->get();
     }
 
+    /**
+     * Return a Model_Url by URL target (long url)
+     * @param  string  $urlTarget 
+     * @param  boolean $active     Only active
+     * @param  boolean $getMaster  Only master
+     * @param  boolean $strict    
+     * @return Model_Url             
+     */
+    public static function findByUrl($urlTarget, $active = false, $getMaster = true, $strict = false)
+    {
+        $url = \LbUrl\Model_Url::query()->where('url_target', $urlTarget)->get_one();
+
+        // Not found
+        if ($url === null)
+        {
+            if ($strict)
+            {
+                throw new \Exception('Url '.$urlTarget.' not found');
+            } 
+            return false;
+        }
+        // Url active only
+        else if ($active)
+        {
+            // If has master and it's active, return it
+            if ($getMaster && $url->url_master && $url->url_master->active && $url->active)
+            {
+                    return $url->url_master;
+            }
+
+            return ($url->active) ? $url : false;
+        }
+
+        // If has master, return it
+        return ($getMaster && $url->url_master) ? $url->url_master : $url;
+    }
+
+    /**
+     * Return a Model_Url by id or slug
+     * @param  mixed   $id        
+     * @param  boolean $active    Only active
+     * @param  boolean $getMaster Only master
+     * @param  boolean $strict    
+     * @return Model_Url             
+     */
     public static function find($id, $active = false, $getMaster = true, $strict = false)
     {
         // Find object
@@ -214,8 +286,8 @@ class Helper_Url
 
     /**
      * Function for set data
-     * @param Object $url  [description]
-     * @param array $data [description]
+     * @param Object $url 
+     * @param array $data 
      */
     protected static function setData($url, $data)
     {

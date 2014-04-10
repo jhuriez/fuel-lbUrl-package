@@ -100,6 +100,16 @@ return array(
 	\LbUrl\Helper_Url::getUrl($url, true);
 ```
 
+### Get model from URL target
+```php
+	$url = \LbUrl\Helper_Url::findByUrl('http://www.fuelphp.com');
+
+	// Return http://www.fuelphp.com
+	\LbUrl\Helper_Url::getUrl($url);
+
+	// Return http://your-fuel-url/go/my-url
+	\LbUrl\Helper_Url::getUrl($url, true);
+```
 
 ## Helper functions
 
@@ -147,6 +157,10 @@ The long url (url target) if $slug=false, else the short url (slug)
 ### forge
 
 > LbUrl\Helper_Url::forge($data = array())
+
+### findByUrl
+
+> LbUrl\Helper_Url::findByUrl($urlTarget, $active = false, $getMaster = true, $strict = false)
 
 ### find
 
