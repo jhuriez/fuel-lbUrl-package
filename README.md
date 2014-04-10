@@ -2,6 +2,14 @@
 
 fuel-lbUrl-package is a package for easily creating and managing urls redirect.
 
+* [Installation](https://github.com/jhuriez/fuel-lbUrl-package#installation)
+* [Configuration](https://github.com/jhuriez/fuel-lbUrl-package#configuration)
+* [Usage](https://github.com/jhuriez/fuel-lbUrl-package#usage-example)
+* [Helper Functions](https://github.com/jhuriez/fuel-lbUrl-package#helper-functions)
+* [Helper Model functions](https://github.com/jhuriez/fuel-lbUrl-package#helper-model-functions)
+* [URL Module](https://github.com/jhuriez/fuel-lbUrl-package#url-module)
+* [TODO](https://github.com/jhuriez/fuel-lbUrl-package#todo)
+
 ## Installation
 
 * Clone or download the fuel-lbUrl-package repository
