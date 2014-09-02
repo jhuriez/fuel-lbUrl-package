@@ -113,11 +113,10 @@ class Helper_Url
         }
         else
         {
-            $val = $url->url_target;
+            $val = str_replace(' ', '%20', $url->url_target);
         }
-
+        
         $isUrl = (preg_match($regex, $val) || filter_var($val, FILTER_VALIDATE_URL));
-
         $uri = ($isUrl) ? $val : \Uri::base() . $val;
         return $uri;
     }
