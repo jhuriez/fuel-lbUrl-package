@@ -117,7 +117,7 @@ class Helper_Url
         }
         
         $isUrl = (preg_match($regex, $val) || filter_var($val, FILTER_VALIDATE_URL));
-        $uri = ($isUrl) ? $val : \Uri::base() . $val;
+        $uri = ($isUrl) ? \Lb\Tool::url($val) : \Uri::base() . $val;
         return $uri;
     }
 
@@ -295,7 +295,7 @@ class Helper_Url
         {
             if ($attr == 'slug')
             {
-                $value = \Inflector::friendly_title($value, '-');
+                // $value = \Inflector::friendly_title($value, '-');
                 $url->{$attr} = $value;
             }
             if ($attr == 'method')
