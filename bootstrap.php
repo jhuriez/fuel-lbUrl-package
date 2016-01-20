@@ -10,7 +10,7 @@
  * @copyright  2013 Julien Huriez
  * @link   https://github.com/jhuriez/fuel-lbUrl-package
  */
-Autoloader::add_core_namespace('LbUrl');
+Autoloader::add_namespace('LbUrl', __DIR__);
 
 Autoloader::add_classes(array(
     'LbUrl\\Helper_Url' => __DIR__ . '/classes/helper/url.php',
