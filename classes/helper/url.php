@@ -69,7 +69,6 @@ class Helper_Url
     public static function redirect($url)
     {
         (is_numeric($url) or is_string($url)) and $url = self::find($url, true);
-
         if ($url === false) return false;
 
         $uri = self::getUrl($url);
@@ -192,7 +191,12 @@ class Helper_Url
     public static function find($id, $active = false, $getMaster = true, $strict = false)
     {
         // Find object
-        $url = (is_numeric($id)) ? \LbUrl\Model_Url::find($id) : \LbUrl\Model_Url::query()->where('slug', $id)->get_one();
+        $url = \LbUrl\Model_Url::query()->where('slug', $id)->get_one();
+
+        if ($url == null && is_numeric($id))
+        {
+            $url = \LbUrl\Model_Url::find($id);
+        }
 
         // Not found
         if ($url === null)
