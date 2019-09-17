@@ -16,4 +16,7 @@ return array(
 
 	'location' => 'Location',
 	'refresh' => 'Refresh',
+
+	'is_download' => 'Is download',
+	'expired_at' => 'Expired at',
 );

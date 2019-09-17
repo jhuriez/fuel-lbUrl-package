@@ -40,10 +40,20 @@ class Model_Url extends \Orm\Model
             'null' => false,
             'form' => array('type' => 'select', 'value' => '0', 'options' => array('0' => 'url_model_url.no', '1' => 'url_model_url.yes')),
         ),
+        'is_download' => array(
+            'label' => 'url_model_url.is_download',
+            'default' => false,
+            'null' => false,
+            'form' => array('type' => 'select', 'value' => '0', 'options' => array('0' => 'url_model_url.no', '1' => 'url_model_url.yes')),
+        ),
         'hits' => array(
             'default' => 0,
             'null' => true,
             'form' => array('type' => false),
+        ),
+        'expired_at' => array(
+            'label' => 'url_model_url.expired_at',
+            'null' => true,
         ),
         'created_at' => array(
             'form' => array('type' => false),

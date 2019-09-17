@@ -23,7 +23,7 @@ class Helper_Url
      * @param  int     $length    
      * @return Model_Url             
      */
-    public static function generate($urlTarget, $slug = false, $prefix = false, $suffix = false, $code = '302', $method = 'location', $randomType = false, $length = false)
+    public static function generate($urlTarget, $slug = false, $prefix = false, $suffix = false, $code = '302', $method = 'location', $randomType = false, $length = false, $isDownload = false, $expiredAt = null)
     {
         // Slug
         $slug = ($slug) ? : self::randomSlug($randomType, $length);
@@ -36,6 +36,8 @@ class Helper_Url
             'code' => $code,
             'method' => $method,
             'active' => true,
+            'is_download' => $isDownload,
+            'expired_at' => $expiredAt
         );
 
         $url = self::forge($data);
@@ -71,13 +73,52 @@ class Helper_Url
         (is_numeric($url) or is_string($url)) and $url = self::find($url, true);
         if ($url === false) return false;
 
-        $uri = self::getUrl($url);
+        // Check if DOCROOT in URL
+        $urlTargetCompare = str_replace(['/', '\\'], ['', ''], $url->url_target);
+        $docrootCompare = str_replace(['/', '\\'], ['', ''], DOCROOT);
+        if (strstr($urlTargetCompare, $docrootCompare))
+        {
+            $uri = $url->url_target;
+        }
+        else
+        {
+            // If IsDownload and same domain, we replace domain with the DOCROOT for download
+            if ($url->is_download && strstr($url->url_target, \Config::get('domains.main.host')))
+            {
+                $uri = $url->url_target;
+                $uri = str_replace(\Config::get('domains.main.host'), DOCROOT, $uri);
+                $uri = str_replace(['http://', 'https://'], ['', ''], $uri);
+            }
+            // Normal URL
+            else
+            {
+                $uri = self::getUrl($url);
+            }
+        }
 
         // Increment hit
         $url->hits++;
         $url = self::manage($url);
 
-        \Response::redirect($uri, $url->method, $url->code);
+        // Check le Expired at
+        if ($url->expired_at)
+        {
+            if (time() > $url->expired_at)
+            {
+                die('URL expired');
+            }
+        }
+
+
+        if ($url->is_download)
+        {
+            \File::download($uri, null, null, null, false, 'inline');
+            die();
+        }
+        else
+        {
+            \Response::redirect($uri, $url->method, $url->code);
+        }
     }
 
     /**
